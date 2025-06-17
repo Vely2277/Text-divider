@@ -74,4 +74,8 @@ button:hover {
 
 .copyBtn:hover {
   background-color: #444;
+  
+  .checkboxWrapper {
+  margin-top: 10px;
+}
 }
