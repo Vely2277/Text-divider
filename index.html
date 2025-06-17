@@ -1,1 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Text Splitter</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 2rem;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9fafb;
+      color: #111827;
+    }
 
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .input-section, .output-section {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    textarea, input[type="number"] {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 1rem;
+      resize: vertical;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #2563eb;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-size: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    button:hover {
+      background-color: #1d4ed8;
+    }
+
+    .chunk-box {
+      background-color: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .chunk-box textarea {
+      width: 100%;
+      height: 200px;
+      resize: vertical;
+      font-family: monospace;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background-color: #e5e7eb;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .copy-btn:hover {
+      background-color: #d1d5db;
+    }
+
+    footer {
+      text-align: center;
+      color: #6b7280;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Text Splitter</h1>
+
+  <div class="input-section">
+    <textarea id="inputText" rows="10" placeholder="Paste your long text or code here..."></textarea>
+    <input type="number" id="wordLimit" placeholder="Enter number of words per chunk (e.g. 10000)" min="1" />
+    <button onclick="splitText()">Split Text</button>
+  </div>
+
+  <div class="output-section" id="outputChunks"></div>
+
+  <footer>
+    Made with ❤️ and deployed on Vercel
+  </footer>
+
+  <script>
+    function splitText() {
+      const text = document.getElementById('inputText').value.trim();
+      const wordLimit = parseInt(document.getElementById('wordLimit').value);
+      const outputDiv = document.getElementById('outputChunks');
+      outputDiv.innerHTML = '';
+
+      if (!text || isNaN(wordLimit) || wordLimit < 1) {
+        alert('Please enter valid text and word limit.');
+        return;
+      }
+
+      const words = text.split(/\s+/);
+      const chunks = [];
+
+      for (let i = 0; i < words.length; i += wordLimit) {
+        chunks.push(words.slice(i, i + wordLimit).join(' '));
+      }
+
+      chunks.forEach((chunk, index) => {
+        const box = document.createElement('div');
+        box.className = 'chunk-box';
+
+        const textarea = document.createElement('textarea');
+        textarea.readOnly = true;
+        textarea.textContent = chunk;
+
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-btn';
+        copyBtn.textContent = 'Copy';
+        copyBtn.onclick = () => {
+          navigator.clipboard.writeText(chunk);
+          copyBtn.textContent = 'Copied!';
+          setTimeout(() => (copyBtn.textContent = 'Copy'), 1500);
+        };
+
+        box.appendChild(copyBtn);
+        box.appendChild(textarea);
+        outputDiv.appendChild(box);
+      });
+    }
+  </script>
+
+</body>
+</html>
