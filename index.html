@@ -3,23 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Text Splitter</title>
+  <title>Text Splitter by Emmy</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
     <h1>Text Splitter</h1>
-    <h1>By Emmy 🥳🤑</h1>
 
     <textarea id="inputText" placeholder="Paste your text or code here..."></textarea>
 
     <div class="options">
       <label for="wordCount">Words per split:</label>
       <input type="number" id="wordCount" value="10000" min="1" />
+
+      <label class="checkbox">
+        <input type="checkbox" id="addMessages" />
+        Add messages at beginning of each chunk
+      </label>
+
       <button onclick="splitText()">Split</button>
     </div>
 
     <div id="outputArea"></div>
+
+    <footer>
+      <p>Created by <strong>EMMY 🥳🔥❤️</strong></p>
+    </footer>
   </div>
 
   <script src="script.js"></script>
