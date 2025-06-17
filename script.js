@@ -1,10 +1,11 @@
 function splitText() {
   const text = document.getElementById("inputText").value.trim();
-  const words = text.split(/\s+/); // split on any space, tab, or newline
+  const words = text.split(/\s+/);
   const count = parseInt(document.getElementById("wordCount").value, 10);
+  const addMessages = document.getElementById("addMessages").checked;
 
   const outputArea = document.getElementById("outputArea");
-  outputArea.innerHTML = ""; // clear previous output
+  outputArea.innerHTML = "";
 
   if (words.length === 0 || isNaN(count) || count <= 0) {
     alert("Please input valid text and a word count.");
@@ -15,7 +16,20 @@ function splitText() {
 
   for (let i = 0; i < totalChunks; i++) {
     const chunkWords = words.slice(i * count, (i + 1) * count);
-    const chunkText = chunkWords.join(" ");
+    let chunkText = chunkWords.join(" ");
+
+    // If user wants the message added
+    if (addMessages) {
+      if (i === 0) {
+        chunkText = "THIS IS THE FIRST CODE, IT IS TOO LONG, PLEASE CALM DOWN AND WAIT FOR THE SECOND CODE\n\n" + chunkText;
+      } else if (i === totalChunks - 1) {
+        chunkText = "THIS IS THE LAST CODE, PLEASE READ AND ANALYZE THEN I WILL TELL YOU MY EXACT ISSUE\n\n" + chunkText;
+      } else {
+        const nth = getOrdinal(i + 1); // e.g. 2 → SECOND
+        const next = getOrdinal(i + 2); // e.g. 3 → THIRD
+        chunkText = `THIS IS THE ${nth} CODE, IT IS TOO LONG, PLEASE CALM DOWN AND WAIT FOR THE ${next} CODE\n\n` + chunkText;
+      }
+    }
 
     const splitBox = document.createElement("div");
     splitBox.className = "splitBox";
@@ -37,4 +51,14 @@ function splitText() {
     splitBox.appendChild(textarea);
     outputArea.appendChild(splitBox);
   }
+}
+
+// Helper function to convert numbers to ordinal words (2 → SECOND, 3 → THIRD, etc.)
+function getOrdinal(n) {
+  const ordinals = [
+    "", "FIRST", "SECOND", "THIRD", "FOURTH", "FIFTH", "SIXTH", "SEVENTH", "EIGHTH", "NINTH", "TENTH",
+    "ELEVENTH", "TWELFTH", "THIRTEENTH", "FOURTEENTH", "FIFTEENTH", "SIXTEENTH", "SEVENTEENTH",
+    "EIGHTEENTH", "NINETEENTH", "TWENTIETH"
+  ];
+  return ordinals[n] || `${n}TH`;
 }
